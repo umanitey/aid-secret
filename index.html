@@ -350,6 +350,13 @@
       <textarea id="rules-input" rows="4"></textarea>
       <button id="generate-btn" data-i18n="generateBtn"></button>
       <p id="min-warning" class="hidden" data-i18n="minWarning"></p>
+      <div id="rules-output" class="hidden" style="margin-top:1.5rem;background:rgba(26,122,90,.07);border-radius:10px;padding:1rem 1.2rem;text-align:left">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+          <span style="font-size:.85rem;font-weight:700;color:#1a7a5a" data-i18n="rulesTitle"></span>
+          <button id="copy-rules-btn" style="margin:0;padding:.3rem .7rem;font-size:.78rem" data-i18n="copyRules"></button>
+        </div>
+        <pre id="rules-preview" style="font-family:inherit;font-size:.82rem;white-space:pre-wrap;color:#2a2a2a;line-height:1.7;margin:0"></pre>
+      </div>
       <div id="links-output" class="links-list hidden"></div>
     </div>
   </div>
@@ -378,6 +385,8 @@
         shareBtn: 'Partager',
         copied: 'Copié !',
         shareText: 'Ton lien, ',
+        copyRules: 'Copier les règles',
+        copiedRules: 'Copié !',
       },
       en: {
         subtitleParticipant: 'Who will receive your gift?',
@@ -401,6 +410,8 @@
         shareBtn: 'Share',
         copied: 'Copied!',
         shareText: 'Your link, ',
+        copyRules: 'Copy rules',
+        copiedRules: 'Copied!',
       },
       ar: {
         subtitleParticipant: 'من ستُهدي هذه المرة؟',
@@ -424,6 +435,8 @@
         shareBtn: 'مشاركة',
         copied: 'تم النسخ!',
         shareText: 'رابطك، ',
+        copyRules: 'نسخ القواعد',
+        copiedRules: 'تم النسخ!',
       }
     };
 
@@ -530,8 +543,10 @@
       });
     }
 
-    function encode(name) {
-      const bytes = new TextEncoder().encode(name);
+    // Encode name (+ optional rules separated by \0) into a hex XOR token
+    function encode(name, rules) {
+      const payload = rules ? name + '\0' + rules : name;
+      const bytes = new TextEncoder().encode(payload);
       const key = crypto.getRandomValues(new Uint8Array(bytes.length));
       const encrypted = new Uint8Array(bytes.length);
       for (let i = 0; i < bytes.length; i++) encrypted[i] = bytes[i] ^ key[i];
@@ -547,20 +562,31 @@
         const data = fromHex(dataHex);
         const decrypted = new Uint8Array(data.length);
         for (let i = 0; i < data.length; i++) decrypted[i] = data[i] ^ key[i];
-        return new TextDecoder().decode(decrypted);
+        const payload = new TextDecoder().decode(decrypted);
+        const sep = payload.indexOf('\0');
+        if (sep === -1) return { name: payload, rules: null };
+        return { name: payload.slice(0, sep), rules: payload.slice(sep + 1) };
       } catch { return null; }
     }
 
     const code = params.get('p');
 
     if (code) {
-      const name = decode(code);
-      if (name) {
+      const decoded = decode(code);
+      if (decoded) {
+        const { name, rules } = decoded;
         document.getElementById('participant').classList.remove('hidden');
-        const customRules = params.get('r');
-        if (customRules) {
+        if (rules) {
           const rulesDiv = document.querySelector('.rules');
-          rulesDiv.innerHTML = '<h3>' + T[currentLang].rulesTitle + '</h3>' + customRules.split('\n').filter(Boolean).map(l => '<p>' + l + '</p>').join('');
+          const h3 = document.createElement('h3');
+          h3.textContent = T[currentLang].rulesTitle;
+          rulesDiv.innerHTML = '';
+          rulesDiv.appendChild(h3);
+          rules.split('\n').filter(Boolean).forEach(line => {
+            const p = document.createElement('p');
+            p.textContent = line;
+            rulesDiv.appendChild(p);
+          });
           rulesDiv.classList.remove('hidden');
         }
         document.getElementById('reveal-btn').addEventListener('click', function () {
@@ -607,16 +633,46 @@
         const output = document.getElementById('links-output');
         const baseUrl = window.location.origin + window.location.pathname;
         const customRules = document.getElementById('rules-input').value.trim();
-        const rulesParam = customRules ? '&r=' + encodeURIComponent(customRules) : '';
+
+        // Show rules block for organizer
+        if (customRules) {
+          document.getElementById('rules-preview').textContent = customRules;
+          const copyBtn = document.getElementById('copy-rules-btn');
+          copyBtn.textContent = T[currentLang].copyRules;
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(customRules).then(() => {
+              copyBtn.textContent = T[currentLang].copiedRules;
+              setTimeout(() => { copyBtn.textContent = T[currentLang].copyRules; }, 2000);
+            });
+          };
+          document.getElementById('rules-output').classList.remove('hidden');
+        }
+
         output.innerHTML = '';
 
         names.forEach(giver => {
           const receiver = assignments[giver];
-          const encoded = encode(receiver);
-          const url = baseUrl + '?p=' + encoded + rulesParam;
+          const encoded = encode(receiver, customRules);
+          const url = baseUrl + '?p=' + encoded;
           const div = document.createElement('div');
           div.className = 'link-item';
-          div.innerHTML = '<strong>' + t.linkFor + ' ' + giver + '</strong><div class="link-item-footer"><a href="' + url + '" target="_blank">' + url + '</a><button class="share-btn" data-url="' + url + '" data-name="' + giver + '">' + t.shareBtn + '</button></div>';
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          a.textContent = url;
+          const shareBtn = document.createElement('button');
+          shareBtn.className = 'share-btn';
+          shareBtn.dataset.url = url;
+          shareBtn.dataset.name = giver;
+          shareBtn.textContent = t.shareBtn;
+          const footer = document.createElement('div');
+          footer.className = 'link-item-footer';
+          footer.appendChild(a);
+          footer.appendChild(shareBtn);
+          const strong = document.createElement('strong');
+          strong.textContent = t.linkFor + ' ' + giver;
+          div.appendChild(strong);
+          div.appendChild(footer);
           output.appendChild(div);
         });
         output.classList.remove('hidden');
