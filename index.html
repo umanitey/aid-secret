@@ -315,7 +315,7 @@
           const url = btn.dataset.url;
           const name = btn.dataset.name;
           if (navigator.share) {
-            navigator.share({ title: '<span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span>', text: 'Ton lien Secret Santa, ' + name + ' !', url });
+            navigator.share({ title: '<span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span>', text: 'Ton lien El Aid El Secret' + name + ' !', url });
           } else {
             navigator.clipboard.writeText(url).then(() => {
               btn.textContent = 'Copie !';
