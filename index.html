@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span></title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Yeseva+One&display=swap');
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -33,6 +33,10 @@
       color: #1a7a5a;
     }
 
+    @media (max-width: 480px) {
+      .logo img { height: 130px; }
+    }
+
     h1 {
       font-size: 3rem;
       font-weight: 900;
@@ -47,7 +51,7 @@
       color: #1a1a1a;
       opacity: .55;
       font-weight: 500;
-      margin-bottom: 3rem;
+      margin-bottom: 1rem;
     }
 
     .hidden { display: none; }
@@ -179,7 +183,7 @@
   <div class="container">
     <!-- Mode participant -->
     <div id="participant" class="hidden">
-      <div class="logo"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="31" fill="#1a7a5a"/><path d="M38 20C30.5 20 24 26 24 34C24 42 30.5 48 38 48C41.5 48 44.5 46.5 46.5 44.5C44 45.5 41 46 38 44C32 41 28 37.5 28 34C28 28 32.5 22 38 20C38 20 38 20 38 20Z" fill="white" opacity=".15"/><path d="M36 18C27.2 18 20 25.2 20 34C20 42.8 27.2 50 36 50C40.5 50 44.5 48.2 47.5 45.2C45.2 46 42.7 46.5 40 46C33 44.5 28 39.8 28 34C28 27.5 32.5 22 38.5 20.5C37.7 18.8 36.9 18 36 18Z" fill="white"/><polygon points="47,14 48.2,17.8 52,14 48.2,10.2" fill="white"/></svg></div>
+      <div class="logo"><img src="mouton.png" height="250" alt="logo mouton"></div>
       <h1><span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span></h1>
       <p class="subtitle">Qui va recevoir ton cadeau ?</p>
       <button id="reveal-btn">Decouvrir</button>
@@ -196,14 +200,14 @@
 
     <!-- Mode erreur -->
     <div id="error" class="hidden">
-      <div class="logo"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="31" fill="#1a7a5a"/><path d="M38 20C30.5 20 24 26 24 34C24 42 30.5 48 38 48C41.5 48 44.5 46.5 46.5 44.5C44 45.5 41 46 38 44C32 41 28 37.5 28 34C28 28 32.5 22 38 20C38 20 38 20 38 20Z" fill="white" opacity=".15"/><path d="M36 18C27.2 18 20 25.2 20 34C20 42.8 27.2 50 36 50C40.5 50 44.5 48.2 47.5 45.2C45.2 46 42.7 46.5 40 46C33 44.5 28 39.8 28 34C28 27.5 32.5 22 38.5 20.5C37.7 18.8 36.9 18 36 18Z" fill="white"/><polygon points="47,14 48.2,17.8 52,14 48.2,10.2" fill="white"/></svg></div>
+      <div class="logo"><img src="mouton.png" height="250" alt="logo mouton"></div>
       <h1><span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span></h1>
       <p class="error">Lien invalide.<br>Demande ton lien a l'organisateur.</p>
     </div>
 
     <!-- Mode generateur -->
     <div id="generator" class="hidden">
-      <div class="logo"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="31" fill="#1a7a5a"/><path d="M38 20C30.5 20 24 26 24 34C24 42 30.5 48 38 48C41.5 48 44.5 46.5 46.5 44.5C44 45.5 41 46 38 44C32 41 28 37.5 28 34C28 28 32.5 22 38 20C38 20 38 20 38 20Z" fill="white" opacity=".15"/><path d="M36 18C27.2 18 20 25.2 20 34C20 42.8 27.2 50 36 50C40.5 50 44.5 48.2 47.5 45.2C45.2 46 42.7 46.5 40 46C33 44.5 28 39.8 28 34C28 27.5 32.5 22 38.5 20.5C37.7 18.8 36.9 18 36 18Z" fill="white"/><polygon points="47,14 48.2,17.8 52,14 48.2,10.2" fill="white"/></svg></div>
+      <div class="logo"><img src="mouton.png" height="200" alt="logo mouton"></div>
       <h1><span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span></h1>
       <p class="subtitle">Le tirage au sort des cadeaux</p>
       <textarea id="names-input" rows="6" placeholder="Un prenom par ligne&#10;&#10;Fatima&#10;Youssef&#10;Amina"></textarea>
