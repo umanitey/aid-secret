@@ -140,8 +140,32 @@
     .link-item a {
       color: rgba(0,0,0,.4);
       text-decoration: none;
+      font-size: .75rem;
     }
     .link-item a:hover { color: #1a1a1a; }
+    .link-item-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+      margin-top: .4rem;
+    }
+    .link-item-footer a { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .share-btn {
+      margin: 0;
+      padding: .35rem .8rem;
+      font-size: .78rem;
+      font-weight: 600;
+      background: #1a7a5a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .share-btn:hover { opacity: .85; }
+    .share-btn.copied { background: #2a2a2a; }
 
     #min-warning {
       margin-top: 1rem;
@@ -155,7 +179,7 @@
   <div class="container">
     <!-- Mode participant -->
     <div id="participant" class="hidden">
-      <div class="logo"><svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M38 27.5C34.5 35.5 25.5 40 16.5 37C10 34.8 5.5 29 4.5 22.5C3.8 18 4.8 13.5 7.2 10C4 13 2 17.5 2 22.5C2 33.8 11.2 43 22.5 43C30.5 43 37.5 38.5 41 32C40 30.6 39 29.1 38 27.5Z" fill="#1a7a5a"/><path d="M38 27.5C34.5 35.5 25.5 40 16.5 37C10 34.8 5.5 29 4.5 22.5C3.8 18 4.8 13.5 7.2 10C4 13 2 17.5 2 22.5C2 33.8 11.2 43 22.5 43C30.5 43 37.5 38.5 41 32C40 30.6 39 29.1 38 27.5Z" stroke="#1a7a5a" stroke-width="1.5" stroke-linejoin="round"/><circle cx="40" cy="10" r="2" fill="#1a7a5a"/><circle cx="46" cy="18" r="1.5" fill="#1a7a5a" opacity=".6"/><circle cx="44" cy="5" r="1" fill="#1a7a5a" opacity=".4"/></svg></div>
+      <div class="logo"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="31" fill="#1a7a5a"/><path d="M38 20C30.5 20 24 26 24 34C24 42 30.5 48 38 48C41.5 48 44.5 46.5 46.5 44.5C44 45.5 41 46 38 44C32 41 28 37.5 28 34C28 28 32.5 22 38 20C38 20 38 20 38 20Z" fill="white" opacity=".15"/><path d="M36 18C27.2 18 20 25.2 20 34C20 42.8 27.2 50 36 50C40.5 50 44.5 48.2 47.5 45.2C45.2 46 42.7 46.5 40 46C33 44.5 28 39.8 28 34C28 27.5 32.5 22 38.5 20.5C37.7 18.8 36.9 18 36 18Z" fill="white"/><polygon points="47,14 48.2,17.8 52,14 48.2,10.2" fill="white"/></svg></div>
       <h1>El Aid El Secret</h1>
       <p class="subtitle">Qui va recevoir ton cadeau ?</p>
       <button id="reveal-btn">Decouvrir</button>
@@ -172,14 +196,14 @@
 
     <!-- Mode erreur -->
     <div id="error" class="hidden">
-      <div class="logo"><svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M38 27.5C34.5 35.5 25.5 40 16.5 37C10 34.8 5.5 29 4.5 22.5C3.8 18 4.8 13.5 7.2 10C4 13 2 17.5 2 22.5C2 33.8 11.2 43 22.5 43C30.5 43 37.5 38.5 41 32C40 30.6 39 29.1 38 27.5Z" fill="#1a7a5a"/><path d="M38 27.5C34.5 35.5 25.5 40 16.5 37C10 34.8 5.5 29 4.5 22.5C3.8 18 4.8 13.5 7.2 10C4 13 2 17.5 2 22.5C2 33.8 11.2 43 22.5 43C30.5 43 37.5 38.5 41 32C40 30.6 39 29.1 38 27.5Z" stroke="#1a7a5a" stroke-width="1.5" stroke-linejoin="round"/><circle cx="40" cy="10" r="2" fill="#1a7a5a"/><circle cx="46" cy="18" r="1.5" fill="#1a7a5a" opacity=".6"/><circle cx="44" cy="5" r="1" fill="#1a7a5a" opacity=".4"/></svg></div>
+      <div class="logo"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="31" fill="#1a7a5a"/><path d="M38 20C30.5 20 24 26 24 34C24 42 30.5 48 38 48C41.5 48 44.5 46.5 46.5 44.5C44 45.5 41 46 38 44C32 41 28 37.5 28 34C28 28 32.5 22 38 20C38 20 38 20 38 20Z" fill="white" opacity=".15"/><path d="M36 18C27.2 18 20 25.2 20 34C20 42.8 27.2 50 36 50C40.5 50 44.5 48.2 47.5 45.2C45.2 46 42.7 46.5 40 46C33 44.5 28 39.8 28 34C28 27.5 32.5 22 38.5 20.5C37.7 18.8 36.9 18 36 18Z" fill="white"/><polygon points="47,14 48.2,17.8 52,14 48.2,10.2" fill="white"/></svg></div>
       <h1>El Aid El Secret</h1>
       <p class="error">Lien invalide.<br>Demande ton lien a l'organisateur.</p>
     </div>
 
     <!-- Mode generateur -->
     <div id="generator" class="hidden">
-      <div class="logo"><svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M38 27.5C34.5 35.5 25.5 40 16.5 37C10 34.8 5.5 29 4.5 22.5C3.8 18 4.8 13.5 7.2 10C4 13 2 17.5 2 22.5C2 33.8 11.2 43 22.5 43C30.5 43 37.5 38.5 41 32C40 30.6 39 29.1 38 27.5Z" fill="#1a7a5a"/><path d="M38 27.5C34.5 35.5 25.5 40 16.5 37C10 34.8 5.5 29 4.5 22.5C3.8 18 4.8 13.5 7.2 10C4 13 2 17.5 2 22.5C2 33.8 11.2 43 22.5 43C30.5 43 37.5 38.5 41 32C40 30.6 39 29.1 38 27.5Z" stroke="#1a7a5a" stroke-width="1.5" stroke-linejoin="round"/><circle cx="40" cy="10" r="2" fill="#1a7a5a"/><circle cx="46" cy="18" r="1.5" fill="#1a7a5a" opacity=".6"/><circle cx="44" cy="5" r="1" fill="#1a7a5a" opacity=".4"/></svg></div>
+      <div class="logo"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="31" fill="#1a7a5a"/><path d="M38 20C30.5 20 24 26 24 34C24 42 30.5 48 38 48C41.5 48 44.5 46.5 46.5 44.5C44 45.5 41 46 38 44C32 41 28 37.5 28 34C28 28 32.5 22 38 20C38 20 38 20 38 20Z" fill="white" opacity=".15"/><path d="M36 18C27.2 18 20 25.2 20 34C20 42.8 27.2 50 36 50C40.5 50 44.5 48.2 47.5 45.2C45.2 46 42.7 46.5 40 46C33 44.5 28 39.8 28 34C28 27.5 32.5 22 38.5 20.5C37.7 18.8 36.9 18 36 18Z" fill="white"/><polygon points="47,14 48.2,17.8 52,14 48.2,10.2" fill="white"/></svg></div>
       <h1>El Aid El Secret</h1>
       <p class="subtitle">Le tirage au sort des cadeaux</p>
       <textarea id="names-input" rows="6" placeholder="Un prenom par ligne&#10;&#10;Fatima&#10;Youssef&#10;Amina"></textarea>
@@ -275,10 +299,26 @@
           const url = baseUrl + '?p=' + encoded;
           const div = document.createElement('div');
           div.className = 'link-item';
-          div.innerHTML = '<strong>Lien pour ' + giver + '</strong><a href="' + url + '">' + url + '</a>';
+          div.innerHTML = '<strong>Lien pour ' + giver + '</strong><div class="link-item-footer"><a href="' + url + '" target="_blank">' + url + '</a><button class="share-btn" data-url="' + url + '" data-name="' + giver + '">Partager</button></div>';
           output.appendChild(div);
         });
         output.classList.remove("hidden");
+
+        output.addEventListener('click', function(e) {
+          const btn = e.target.closest('.share-btn');
+          if (!btn) return;
+          const url = btn.dataset.url;
+          const name = btn.dataset.name;
+          if (navigator.share) {
+            navigator.share({ title: 'El Aid El Secret', text: 'Ton lien Secret Santa, ' + name + ' !', url });
+          } else {
+            navigator.clipboard.writeText(url).then(() => {
+              btn.textContent = 'Copie !';
+              btn.classList.add('copied');
+              setTimeout(() => { btn.textContent = 'Partager'; btn.classList.remove('copied'); }, 2000);
+            });
+          }
+        });
       });
     }
   </script>
