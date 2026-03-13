@@ -56,6 +56,8 @@
     }
     .lang-btn:hover { color: #1a7a5a; border-color: #1a7a5a; opacity: 1; }
     .lang-btn.active { background: #1a7a5a; color: #fff; border-color: #1a7a5a; }
+    .create-mine-btn { margin-left: .4rem; border-left: 1.5px solid rgba(0,0,0,.1); padding-left: .9rem; color: #1a7a5a; border-color: rgba(26,122,90,.3); }
+    .create-mine-btn:hover { background: rgba(26,122,90,.08); }
 
     .logo {
       font-size: 4rem;
@@ -293,6 +295,30 @@
       color: #1a7a5a;
     }
     [dir="rtl"] label { text-align: right; }
+
+    .notify-row > div {
+      flex-wrap: wrap;
+    }
+    @media (max-width: 420px) {
+      .notify-row > div {
+        flex-direction: column;
+      }
+      .elmoslim-notify-btn {
+        width: 100%;
+        text-align: center;
+      }
+      .notify-input {
+        width: 100% !important;
+      }
+    }
+
+    .secret-hint {
+      font-size: .78rem;
+      color: rgba(0,0,0,.68);
+      font-weight: 600;
+      margin-top: .5rem;
+      letter-spacing: .2px;
+    }
   </style>
 </head>
 <body>
@@ -301,6 +327,7 @@
       <button class="lang-btn" data-lang="fr">FR</button>
       <button class="lang-btn" data-lang="en">EN</button>
       <button class="lang-btn" data-lang="ar">ع</button>
+      <button class="lang-btn create-mine-btn hidden" id="create-mine-btn" onclick="window.location.href=window.location.pathname+'?lang='+currentLang" data-i18n="createMineBtn"></button>
     </div>
 
     <!-- Mode participant -->
@@ -311,6 +338,7 @@
       <button id="reveal-btn" data-i18n="revealBtn"></button>
       <div id="name-box" class="hidden">
         <div class="name-reveal" id="name"></div>
+        <p class="secret-hint" id="secret-hint-text"></p>
         <div class="scroll-hint" id="scroll-hint" onclick="document.getElementById('elmoslim-promo-box').scrollIntoView({behavior:'smooth'});this.style.display='none'">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 5 12 11 18 5"/>
@@ -387,6 +415,8 @@
         shareText: 'Ton lien, ',
         copyRules: 'Copier les règles',
         copiedRules: 'Copié !',
+        secretHint: 'Chut ! Ne révèle ce nom à personne 🤫',
+        createMineBtn: 'Créer le mien',
       },
       en: {
         subtitleParticipant: 'Who will receive your gift?',
@@ -412,6 +442,8 @@
         shareText: 'Your link, ',
         copyRules: 'Copy rules',
         copiedRules: 'Copied!',
+        secretHint: 'Shh! Don\'t reveal this name to anyone 🤫',
+        createMineBtn: 'Create mine',
       },
       ar: {
         subtitleParticipant: 'من ستُهدي هذه المرة؟',
@@ -437,6 +469,8 @@
         shareText: 'رابطك، ',
         copyRules: 'نسخ القواعد',
         copiedRules: 'تم النسخ!',
+        secretHint: 'اكتم ! لا تكشف هذا الاسم لأحد 🤫',
+        createMineBtn: 'أنشئ تيراجي',
       }
     };
 
@@ -606,6 +640,7 @@
       if (decoded) {
         const { name, rules } = decoded;
         document.getElementById('participant').classList.remove('hidden');
+        document.getElementById('create-mine-btn').classList.remove('hidden');
         if (rules) {
           const rulesDiv = document.querySelector('.rules');
           const h3 = document.createElement('h3');
@@ -622,6 +657,7 @@
         document.getElementById('reveal-btn').addEventListener('click', function () {
           this.classList.add('hidden');
           document.getElementById('name').textContent = name;
+          document.getElementById('secret-hint-text').textContent = T[currentLang].secretHint;
           document.getElementById('name-box').classList.remove('hidden');
           document.getElementById('elmoslim-promo-box').classList.remove('hidden');
           const hint = document.getElementById('scroll-hint');
