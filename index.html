@@ -6,7 +6,7 @@
   <title>El Aid El Secret</title>
   <link rel="icon" type="image/png" href="mouton.png">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Yeseva+One&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Naskh+Arabic:wght@400;700&display=swap');
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -19,7 +19,14 @@
       background: #faf9f6;
       color: #1a1a1a;
       padding: 2rem;
-      background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Crect width='120' height='120'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)' fill='none' stroke='%231a7a5a' stroke-width='.6' opacity='.12'%3E%3C!-- outer 8-pointed star --%3E%3Cpolygon points='60,8 68,40 96,20 76,46 112,48 80,56 100,84 70,66 60,100 50,66 20,84 40,56 8,48 44,46 24,20 52,40'/%3E%3C!-- inner 8-pointed star rotated --%3E%3Cpolygon points='60,24 66,46 88,38 72,50 92,60 70,62 80,82 62,68 60,88 58,68 40,82 50,62 28,60 48,50 32,38 54,46' stroke-width='.4'/%3E%3Ccircle cx='60' cy='60' r='30'/%3E%3Ccircle cx='60' cy='60' r='18'/%3E%3Ccircle cx='60' cy='60' r='6' fill='%231a7a5a' fill-opacity='.06' stroke='none'/%3E%3C!-- tessellation links --%3E%3Cline x1='60' y1='0' x2='60' y2='8'/%3E%3Cline x1='60' y1='100' x2='60' y2='120'/%3E%3Cline x1='0' y1='48' x2='8' y2='48'/%3E%3Cline x1='112' y1='48' x2='120' y2='48'/%3E%3Cline x1='0' y1='60' x2='8' y2='60'/%3E%3Cline x1='112' y1='60' x2='120' y2='60'/%3E%3C!-- corner arabesques --%3E%3Cpath d='M0,0 Q30,15 24,20'/%3E%3Cpath d='M120,0 Q90,15 96,20'/%3E%3Cpath d='M0,120 Q30,105 20,84'/%3E%3Cpath d='M120,120 Q90,105 100,84'/%3E%3C/g%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Crect width='120' height='120'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)' fill='none' stroke='%231a7a5a' stroke-width='.6' opacity='.12'%3E%3Cpolygon points='60,8 68,40 96,20 76,46 112,48 80,56 100,84 70,66 60,100 50,66 20,84 40,56 8,48 44,46 24,20 52,40'/%3E%3Cpolygon points='60,24 66,46 88,38 72,50 92,60 70,62 80,82 62,68 60,88 58,68 40,82 50,62 28,60 48,50 32,38 54,46' stroke-width='.4'/%3E%3Ccircle cx='60' cy='60' r='30'/%3E%3Ccircle cx='60' cy='60' r='18'/%3E%3Ccircle cx='60' cy='60' r='6' fill='%231a7a5a' fill-opacity='.06' stroke='none'/%3E%3Cline x1='60' y1='0' x2='60' y2='8'/%3E%3Cline x1='60' y1='100' x2='60' y2='120'/%3E%3Cline x1='0' y1='48' x2='8' y2='48'/%3E%3Cline x1='112' y1='48' x2='120' y2='48'/%3E%3Cline x1='0' y1='60' x2='8' y2='60'/%3E%3Cline x1='112' y1='60' x2='120' y2='60'/%3E%3Cpath d='M0,0 Q30,15 24,20'/%3E%3Cpath d='M120,0 Q90,15 96,20'/%3E%3Cpath d='M0,120 Q30,105 20,84'/%3E%3Cpath d='M120,120 Q90,105 100,84'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    [dir="rtl"] body,
+    [dir="rtl"] textarea,
+    [dir="rtl"] button,
+    [dir="rtl"] input {
+      font-family: 'Noto Naskh Arabic', 'Inter', sans-serif;
     }
 
     .container {
@@ -27,6 +34,28 @@
       width: 100%;
       text-align: center;
     }
+
+    .lang-switcher {
+      display: flex;
+      justify-content: center;
+      gap: .4rem;
+      margin-bottom: 1.5rem;
+    }
+    .lang-btn {
+      margin: 0;
+      padding: .3rem .7rem;
+      font-size: .78rem;
+      font-weight: 700;
+      background: transparent;
+      color: rgba(0,0,0,.35);
+      border: 1.5px solid rgba(0,0,0,.12);
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .15s;
+    }
+    .lang-btn:hover { color: #1a7a5a; border-color: #1a7a5a; opacity: 1; }
+    .lang-btn.active { background: #1a7a5a; color: #fff; border-color: #1a7a5a; }
 
     .logo {
       font-size: 4rem;
@@ -45,6 +74,19 @@
       line-height: 1.1;
       margin-bottom: .4rem;
       color: #1a1a1a;
+    }
+
+    .scroll-hint {
+      margin-top: 1.5rem;
+      color: #1a7a5a;
+      opacity: .6;
+      animation: bounce 1.4s infinite;
+      cursor: pointer;
+    }
+    .scroll-hint svg { display: block; margin: 0 auto; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
     }
 
     .subtitle {
@@ -90,6 +132,7 @@
       border-radius: 8px;
       padding: 1.2rem 1.4rem;
     }
+    [dir="rtl"] .rules { text-align: right; }
     .rules p { margin-bottom: .6rem; }
     .rules p:last-child { margin-bottom: 0; }
     .rules h3 {
@@ -119,6 +162,7 @@
       color: #1a1a1a;
       outline: none;
     }
+    [dir="rtl"] textarea { text-align: right; }
     textarea::placeholder { color: rgba(0,0,0,.25); }
 
     .links-list {
@@ -127,6 +171,7 @@
       max-height: 500px;
       overflow-y: auto;
     }
+    [dir="rtl"] .links-list { text-align: right; }
     .link-item {
       background: rgba(0,0,0,.03);
       border-radius: 10px;
@@ -178,24 +223,117 @@
       color: #e07a5f;
       font-weight: 700;
     }
+
+    .elmoslim-promo {
+      margin-top: 2rem;
+      background: rgba(26,122,90,.07);
+      border-radius: 10px;
+      padding: 1.1rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .8rem;
+      text-align: left;
+    }
+    [dir="rtl"] .elmoslim-promo { text-align: right; }
+    .elmoslim-promo-header {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      width: 100%;
+    }
+    .elmoslim-promo img {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+    .elmoslim-promo-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #1a1a1a;
+    }
+    .elmoslim-promo-title span {
+      display: block;
+      font-size: .75rem;
+      font-weight: 500;
+      color: rgba(0,0,0,.45);
+      margin-top: .1rem;
+    }
+    .elmoslim-promo-text { width: 100%; }
+    .elmoslim-promo-text p {
+      font-size: .82rem;
+      color: #2a2a2a;
+      line-height: 1.5;
+      margin-bottom: .5rem;
+    }
+    .elmoslim-promo-text strong { color: #1a7a5a; }
+    .elmoslim-notify-btn {
+      margin: 0;
+      padding: .45rem 1rem;
+      font-size: .82rem;
+      font-weight: 700;
+      background: #1a7a5a;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity .2s;
+      white-space: nowrap;
+    }
+    .elmoslim-notify-btn:hover { opacity: .85; }
+    .elmoslim-notify-btn.done { background: #2a2a2a; cursor: default; }
+
+    label {
+      display: block;
+      text-align: left;
+      font-size: .85rem;
+      font-weight: 700;
+      color: #1a7a5a;
+    }
+    [dir="rtl"] label { text-align: right; }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="lang-switcher" dir="ltr">
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ar">ع</button>
+    </div>
+
     <!-- Mode participant -->
     <div id="participant" class="hidden">
       <div class="logo"><img src="mouton.png" height="250" alt="logo mouton"></div>
       <h1><span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span></h1>
-      <p class="subtitle">Qui va recevoir ton cadeau ?</p>
-      <button id="reveal-btn">Decouvrir</button>
+      <p class="subtitle" data-i18n="subtitleParticipant"></p>
+      <button id="reveal-btn" data-i18n="revealBtn"></button>
       <div id="name-box" class="hidden">
         <div class="name-reveal" id="name"></div>
+        <div class="scroll-hint" id="scroll-hint" onclick="document.getElementById('elmoslim-promo-box').scrollIntoView({behavior:'smooth'});this.style.display='none'">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 5 12 11 18 5"/>
+            <polyline points="6 13 12 19 18 13"/>
+          </svg>
+        </div>
       </div>
-      <div class="rules">
-        <h3>Les regles</h3>
-        <p>Le principe est simple :</p>
-        <p>Vous tirez un nom, <strong>SANS LE COMMUNIQUER A PERSONNE</strong> au risque de compromettre l'effet de surprise.</p>
-        <p>Vous choisissez un cadeau pour cette personne et le jour J, vous le ramenez chez les Timount bien etiquete avec le nom de la personne concernee.</p>
+      <div class="rules hidden">
+        <h3 data-i18n="rulesTitle"></h3>
+      </div>
+      <div id="elmoslim-promo-box" class="elmoslim-promo hidden">
+        <div class="elmoslim-promo-header">
+          <img src="https://elmoslim.com/images/app_icon.png" alt="ElMoslim">
+          <div class="elmoslim-promo-title">ElMoslim<span data-i18n="promoTagline"></span></div>
+        </div>
+        <div class="elmoslim-promo-text">
+          <p data-i18n-html="promoText"></p>
+          <div style="display:flex;gap:.5rem;margin-top:.6rem">
+            <input id="notify-email" type="text" data-i18n-placeholder="notifyPlaceholder" style="flex:1;padding:.42rem .7rem;font-size:.82rem;border:1.5px solid rgba(26,122,90,.3);border-radius:7px;font-family:inherit;outline:none;background:#fff;color:#1a1a1a;">
+            <button class="elmoslim-notify-btn" id="notify-btn" data-i18n="notifyBtn" onclick="notifyElMoslim(this)"></button>
+          </div>
+          <p id="notify-feedback" style="display:none;font-size:.78rem;color:#1a7a5a;font-weight:700;margin-top:.4rem"></p>
+        </div>
       </div>
     </div>
 
@@ -203,29 +341,206 @@
     <div id="error" class="hidden">
       <div class="logo"><img src="mouton.png" height="250" alt="logo mouton"></div>
       <h1><span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span></h1>
-      <p class="error">Lien invalide.<br>Demande ton lien a l'organisateur.</p>
+      <p class="error" data-i18n-html="errorText"></p>
     </div>
 
-    <!-- Mode generateur -->
+    <!-- Mode générateur -->
     <div id="generator" class="hidden">
       <div class="logo"><img src="mouton.png" height="200" alt="logo mouton"></div>
       <h1><span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span></h1>
-      <p class="subtitle">Le tirage au sort des cadeaux</p>
-      <textarea id="names-input" rows="6" placeholder="Un prenom par ligne&#10;&#10;Fatima&#10;Youssef&#10;Amina"></textarea>
-      <button id="generate-btn">Tirer au sort</button>
-      <p id="min-warning" class="hidden">Il faut au moins 3 participants.</p>
+      <p class="subtitle" data-i18n="subtitleGenerator"></p>
+      <label for="names-input" style="margin-bottom:.4rem" data-i18n="labelNames"></label>
+      <textarea id="names-input" rows="6" data-i18n-placeholder="namesPlaceholder"></textarea>
+      <label for="rules-input" style="margin-top:1rem;margin-bottom:.4rem" data-i18n="labelRules"></label>
+      <textarea id="rules-input" rows="4"></textarea>
+      <button id="generate-btn" data-i18n="generateBtn"></button>
+      <p id="min-warning" class="hidden" data-i18n="minWarning"></p>
       <div id="links-output" class="links-list hidden"></div>
     </div>
   </div>
 
   <script>
+    const T = {
+      fr: {
+        subtitleParticipant: 'Qui va recevoir ton cadeau ?',
+        revealBtn: 'Découvrir',
+        promoTagline: 'Disponible bientôt · iOS & Android · Aïd el-Fitr 2025',
+        promoText: 'En attendant le jour J, prépare-toi 👇<ul style="margin:.5rem 0 .8rem 1.1rem;line-height:2"><li>📖 Lis chaque jour une partie du Coran pour <strong>le compléter en 1 an</strong> — écoute verset par verset, tajwid, phonétique, traduction mot-à-mot, et <strong>la plus grande bibliothèque de traductions et d\'exégèses</strong></li><li>🕌 <strong>Suivi de prière</strong> pour ne plus jamais manquer sa prière ni ses sounnans</li><li>🤲 Invocations quotidiennes — du matin, du soir et bien plus</li></ul><div style="font-size:.8rem;font-weight:700;color:#1a7a5a;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.4px">À venir 🔜</div><ul style="margin:0 0 .8rem 1.1rem;line-height:2;opacity:.75"><li>🎧 <strong>Plus de 300 000</strong> récitations, anasheed et podcasts islamiques</li><li>💰 Calculateur de <strong>zakat</strong> — <strong>simple et complet</strong></li><li>⚖️ Simulateur d\'<strong>héritage</strong> islamique</li><li>📚 Mémorisation du Coran par <strong>révision espacée</strong></li><li>🎙️ Révision avec <strong>détection automatique des erreurs</strong></li><li>✨ Et des surprises incroyables qu\'on garde encore secrètes…</li></ul><div style="font-size:.78rem;color:rgba(0,0,0,.5);border-top:1px solid rgba(26,122,90,.15);padding-top:.6rem">Oui, tout est 100% gratuit et sans pub. Pour toujours, inch\'Allah.</div>',
+        notifyPlaceholder: 'ton@email.com ou @pseudo',
+        notifyBtn: 'Me prévenir',
+        notifySuccess: 'On te prévient dès la sortie. Barak Allahou fik 🤍',
+        notifyError: 'Erreur réseau, réessaie.',
+        rulesTitle: 'Les règles',
+        errorText: 'Lien invalide.<br>Demande ton lien à l\'organisateur.',
+        subtitleGenerator: 'Le tirage au sort des cadeaux',
+        labelNames: 'Participants — un prénom par ligne',
+        namesPlaceholder: 'Fatima\nMaryam\nYoussef\nIbrahim',
+        labelRules: 'Règles',
+        defaultRules: 'Le principe est simple :\nVous tirez un nom, SANS LE COMMUNIQUER À PERSONNE au risque de compromettre l\'effet de surprise.\nVous choisissez un cadeau pour cette personne et le jour J, vous le ramenez bien étiqueté avec le nom de la personne concernée.',
+        generateBtn: 'Tirer au sort',
+        minWarning: 'Il faut au moins 3 participants.',
+        linkFor: 'Lien pour',
+        shareBtn: 'Partager',
+        copied: 'Copié !',
+        shareText: 'Ton lien, ',
+      },
+      en: {
+        subtitleParticipant: 'Who will receive your gift?',
+        revealBtn: 'Reveal',
+        promoTagline: 'Coming soon · iOS & Android · Eid al-Fitr 2025',
+        promoText: 'While you wait, get ready 👇<ul style="margin:.5rem 0 .8rem 1.1rem;line-height:2"><li>📖 Read a portion of the Quran every day to <strong>complete it in 1 year</strong> — verse by verse audio, tajweed, phonetics, word-by-word translation, and <strong>the largest library of translations & tafsir</strong></li><li>🕌 <strong>Prayer tracker</strong> so you never miss a salah or sunnah again</li><li>🤲 Daily adhkar — morning, evening and beyond</li></ul><div style="font-size:.8rem;font-weight:700;color:#1a7a5a;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.4px">Coming soon 🔜</div><ul style="margin:0 0 .8rem 1.1rem;line-height:2;opacity:.75"><li>🎧 <strong>300k+</strong> Islamic recitations, nasheeds & podcasts</li><li>💰 <strong>Zakat</strong> calculator — <strong>simple & complete</strong></li><li>⚖️ Islamic <strong>inheritance</strong> simulator</li><li>📚 Quran memorization with <strong>spaced repetition</strong></li><li>🎙️ Recitation review with <strong>automatic error detection</strong></li><li>✨ And incredible surprises we\'re keeping secret for now…</li></ul><div style="font-size:.78rem;color:rgba(0,0,0,.5);border-top:1px solid rgba(26,122,90,.15);padding-top:.6rem">Yes, everything is 100% free with no ads. Forever, insha\'Allah.</div>',
+        notifyPlaceholder: 'your@email.com or @handle',
+        notifyBtn: 'Notify me',
+        notifySuccess: 'We\'ll let you know when it\'s out. Barak Allahou fik 🤍',
+        notifyError: 'Network error, please try again.',
+        rulesTitle: 'Rules',
+        errorText: 'Invalid link.<br>Ask the organizer for your link.',
+        subtitleGenerator: 'Secret gift draw',
+        labelNames: 'Participants — one name per line',
+        namesPlaceholder: 'Fatima\nMaryam\nYoussef\nIbrahim',
+        labelRules: 'Rules',
+        defaultRules: 'The principle is simple:\nYou draw a name and must NOT TELL ANYONE — it would ruin the surprise.\nChoose a gift for that person and bring it on the day, labeled with their name.',
+        generateBtn: 'Draw',
+        minWarning: 'At least 3 participants required.',
+        linkFor: 'Link for',
+        shareBtn: 'Share',
+        copied: 'Copied!',
+        shareText: 'Your link, ',
+      },
+      ar: {
+        subtitleParticipant: 'من ستُهدي هذه المرة؟',
+        revealBtn: 'اكتشف',
+        promoTagline: 'قريباً · iOS & Android · عيد الفطر 2025',
+        promoText: 'في انتظار العيد، استعدّ 👇<ul style="margin:.5rem 0 .8rem 1.5rem;line-height:2;direction:rtl;text-align:right"><li>📖 اقرأ جزءاً من القرآن يومياً <strong>لختمه في سنة</strong> — استماع آية بآية، تجويد، صوتيات، ترجمة كلمة بكلمة، و<strong>أكبر مكتبة تفاسير وترجمات</strong></li><li>🕌 <strong>متابعة الصلوات</strong> حتى لا تفوتك صلاة أو سنّة أبداً</li><li>🤲 أذكار يومية — الصباح والمساء والمزيد</li></ul><div style="font-size:.8rem;font-weight:700;color:#1a7a5a;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.4px;direction:rtl;text-align:right">قريباً 🔜</div><ul style="margin:0 0 .8rem 1.5rem;line-height:2;opacity:.75;direction:rtl;text-align:right"><li>🎧 <strong>أكثر من 300 ألف</strong> تلاوة وأناشيد وبودكاست إسلامي</li><li>💰 حاسبة <strong>الزكاة</strong> — <strong>سهلة وشاملة</strong></li><li>⚖️ محاكي <strong>المواريث</strong> الإسلامي</li><li>📚 حفظ القرآن بأسلوب <strong>التكرار المتباعد</strong></li><li>🎙️ مراجعة التلاوة مع <strong>كشف الأخطاء تلقائياً</strong></li><li>✨ ومفاجآت رائعة نحتفظ بها سراً في الوقت الراهن…</li></ul><div style="font-size:.78rem;color:rgba(0,0,0,.5);border-top:1px solid rgba(26,122,90,.15);padding-top:.6rem;direction:rtl;text-align:right">نعم، كل شيء مجاني 100% وبدون إعلانات. للأبد، إن شاء الله.</div>',
+        notifyPlaceholder: 'بريدك أو حسابك',
+        notifyBtn: 'أخبرني',
+        notifySuccess: 'سنخبرك عند الإطلاق. بارك الله فيك 🤍',
+        notifyError: 'خطأ في الشبكة، حاول مجدداً.',
+        rulesTitle: 'القواعد',
+        errorText: 'رابط غير صالح.<br>اطلب رابطك من المنظِّم.',
+        subtitleGenerator: 'قرعة الهدايا السرية',
+        labelNames: 'المشاركون — اسم في كل سطر',
+        namesPlaceholder: 'فاطمة\nمريم\nيوسف\nإبراهيم',
+        labelRules: 'القواعد',
+        defaultRules: 'المبدأ بسيط:\nتسحب اسماً ولا تُخبر أحداً — وإلا ستفسد المفاجأة.\nاختر هدية لهذا الشخص وأحضرها يوم الحفل مع بطاقة باسم صاحبها.',
+        generateBtn: 'أجرِ القرعة',
+        minWarning: 'يجب أن يكون هناك 3 مشاركين على الأقل.',
+        linkFor: 'رابط',
+        shareBtn: 'مشاركة',
+        copied: 'تم النسخ!',
+        shareText: 'رابطك، ',
+      }
+    };
+
+    let currentLang = 'fr';
+    const defaultRulesValues = { fr: T.fr.defaultRules, en: T.en.defaultRules, ar: T.ar.defaultRules };
+
+    function applyLang(lang) {
+      const t = T[lang];
+      if (!t) return;
+      currentLang = lang;
+
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.dataset.i18nHtml;
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+
+      // Update names placeholder (multiline)
+      const namesInput = document.getElementById('names-input');
+      if (namesInput) namesInput.placeholder = t.namesPlaceholder;
+
+      // Update rules textarea only if it still contains a default value
+      const rulesInput = document.getElementById('rules-input');
+      if (rulesInput) {
+        const isDefault = Object.values(defaultRulesValues).includes(rulesInput.value);
+        if (isDefault || rulesInput.value === '') rulesInput.value = t.defaultRules;
+      }
+
+      // Update rules title (innerHTML replacement removes data-i18n)
+      const rulesH3 = document.querySelector('.rules h3');
+      if (rulesH3) rulesH3.textContent = t.rulesTitle;
+
+      // Update share buttons in generated list
+      document.querySelectorAll('.share-btn:not(.copied)').forEach(btn => {
+        btn.textContent = t.shareBtn;
+      });
+
+      // Update lang buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      // Persist
+      localStorage.setItem('aid-secret-lang', lang);
+      const url = new URL(window.location);
+      url.searchParams.set('lang', lang);
+      history.replaceState(null, '', url);
+    }
+
+    function setLang(lang) { applyLang(lang); }
+
+    // Lang switcher buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => setLang(btn.dataset.lang));
+    });
+
+    // Detect lang
+    const params = new URLSearchParams(window.location.search);
+    const langParam = params.get('lang');
+    const savedLang = localStorage.getItem('aid-secret-lang');
+    const initLang = (T[langParam] ? langParam : null) || (T[savedLang] ? savedLang : null) || 'fr';
+    applyLang(initLang);
+
+    // ── App logic ──────────────────────────────────────────────
+
+    function notifyElMoslim(btn) {
+      const input = document.getElementById('notify-email');
+      const contact = input.value.trim();
+      if (!contact) { input.style.borderColor = '#e07a5f'; input.focus(); return; }
+      input.style.borderColor = '';
+      btn.disabled = true;
+      input.disabled = true;
+      btn.textContent = '…';
+      const webhook = 'https://discord.com/api/webhooks/1471744286587617376/n8obXKYi1lXKUKepFAejyiXjBOgOv4buCUvQD1j1Eai2kGOIwsErk1E7BqDrsZBiiYwz';
+      fetch(webhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: '🐑 **ElMoslim — Notification El Aid El Secret**\n📬 `' + contact + '`' })
+      }).then(res => {
+        if (!res.ok) res.text().then(t => console.error('Webhook error', res.status, t));
+        btn.textContent = '✓ ' + T[currentLang].notifyBtn;
+        btn.classList.add('done');
+        const fb = document.getElementById('notify-feedback');
+        fb.textContent = T[currentLang].notifySuccess;
+        fb.style.display = 'block';
+      }).catch(err => {
+        console.error('Webhook failed', err);
+        btn.disabled = false;
+        input.disabled = false;
+        btn.textContent = T[currentLang].notifyBtn;
+        const fb = document.getElementById('notify-feedback');
+        fb.textContent = T[currentLang].notifyError;
+        fb.style.color = '#e07a5f';
+        fb.style.display = 'block';
+      });
+    }
+
     function encode(name) {
       const bytes = new TextEncoder().encode(name);
       const key = crypto.getRandomValues(new Uint8Array(bytes.length));
       const encrypted = new Uint8Array(bytes.length);
-      for (let i = 0; i < bytes.length; i++) {
-        encrypted[i] = bytes[i] ^ key[i];
-      }
+      for (let i = 0; i < bytes.length; i++) encrypted[i] = bytes[i] ^ key[i];
       const toHex = (arr) => Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
       return toHex(key) + '.' + toHex(encrypted);
     }
@@ -237,32 +552,37 @@
         const key = fromHex(keyHex);
         const data = fromHex(dataHex);
         const decrypted = new Uint8Array(data.length);
-        for (let i = 0; i < data.length; i++) {
-          decrypted[i] = data[i] ^ key[i];
-        }
+        for (let i = 0; i < data.length; i++) decrypted[i] = data[i] ^ key[i];
         return new TextDecoder().decode(decrypted);
-      } catch {
-        return null;
-      }
+      } catch { return null; }
     }
 
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("p");
+    const code = params.get('p');
 
     if (code) {
       const name = decode(code);
       if (name) {
-        document.getElementById("participant").classList.remove("hidden");
-        document.getElementById("reveal-btn").addEventListener("click", function () {
-          this.classList.add("hidden");
-          document.getElementById("name").textContent = name;
-          document.getElementById("name-box").classList.remove("hidden");
+        document.getElementById('participant').classList.remove('hidden');
+        const customRules = params.get('r');
+        if (customRules) {
+          const rulesDiv = document.querySelector('.rules');
+          rulesDiv.innerHTML = '<h3>' + T[currentLang].rulesTitle + '</h3>' + customRules.split('\n').filter(Boolean).map(l => '<p>' + l + '</p>').join('');
+          rulesDiv.classList.remove('hidden');
+        }
+        document.getElementById('reveal-btn').addEventListener('click', function () {
+          this.classList.add('hidden');
+          document.getElementById('name').textContent = name;
+          document.getElementById('name-box').classList.remove('hidden');
+          document.getElementById('elmoslim-promo-box').classList.remove('hidden');
+          const hint = document.getElementById('scroll-hint');
+          const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { hint.style.display = 'none'; obs.disconnect(); } }, { threshold: 0.5 });
+          obs.observe(document.getElementById('elmoslim-promo-box'));
         });
       } else {
-        document.getElementById("error").classList.remove("hidden");
+        document.getElementById('error').classList.remove('hidden');
       }
     } else {
-      document.getElementById("generator").classList.remove("hidden");
+      document.getElementById('generator').classList.remove('hidden');
 
       function shuffle(arr) {
         const a = [...arr];
@@ -276,51 +596,51 @@
       function drawCircle(names) {
         const shuffled = shuffle(names);
         const assignments = {};
-        for (let i = 0; i < shuffled.length; i++) {
-          assignments[shuffled[i]] = shuffled[(i + 1) % shuffled.length];
-        }
+        for (let i = 0; i < shuffled.length; i++) assignments[shuffled[i]] = shuffled[(i + 1) % shuffled.length];
         return assignments;
       }
 
-      document.getElementById("generate-btn").addEventListener("click", function () {
-        const raw = document.getElementById("names-input").value.trim();
+      document.getElementById('generate-btn').addEventListener('click', function () {
+        const raw = document.getElementById('names-input').value.trim();
         if (!raw) return;
         const names = raw.split('\n').map(n => n.trim()).filter(Boolean);
-        const warning = document.getElementById("min-warning");
-        if (names.length < 3) {
-          warning.classList.remove("hidden");
-          return;
-        }
-        warning.classList.add("hidden");
+        const warning = document.getElementById('min-warning');
+        if (names.length < 3) { warning.classList.remove('hidden'); return; }
+        warning.classList.add('hidden');
 
+        const t = T[currentLang];
         const assignments = drawCircle(names);
-        const output = document.getElementById("links-output");
+        const output = document.getElementById('links-output');
         const baseUrl = window.location.origin + window.location.pathname;
+        const customRules = document.getElementById('rules-input').value.trim();
+        const rulesParam = customRules ? '&r=' + encodeURIComponent(customRules) : '';
         output.innerHTML = '';
 
         names.forEach(giver => {
           const receiver = assignments[giver];
           const encoded = encode(receiver);
-          const url = baseUrl + '?p=' + encoded;
+          const url = baseUrl + '?p=' + encoded + rulesParam;
           const div = document.createElement('div');
           div.className = 'link-item';
-          div.innerHTML = '<strong>Lien pour ' + giver + '</strong><div class="link-item-footer"><a href="' + url + '" target="_blank">' + url + '</a><button class="share-btn" data-url="' + url + '" data-name="' + giver + '">Partager</button></div>';
+          div.innerHTML = '<strong>' + t.linkFor + ' ' + giver + '</strong><div class="link-item-footer"><a href="' + url + '" target="_blank">' + url + '</a><button class="share-btn" data-url="' + url + '" data-name="' + giver + '">' + t.shareBtn + '</button></div>';
           output.appendChild(div);
         });
-        output.classList.remove("hidden");
+        output.classList.remove('hidden');
+        output.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         output.addEventListener('click', function(e) {
           const btn = e.target.closest('.share-btn');
           if (!btn) return;
           const url = btn.dataset.url;
           const name = btn.dataset.name;
+          const t = T[currentLang];
           if (navigator.share) {
-            navigator.share({ title: '<span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span>', text: 'Ton lien El Aid El Secret' + name + ' !', url });
+            navigator.share({ title: 'El Aid El Secret', text: t.shareText + name + ' !', url });
           } else {
             navigator.clipboard.writeText(url).then(() => {
-              btn.textContent = 'Copie !';
+              btn.textContent = t.copied;
               btn.classList.add('copied');
-              setTimeout(() => { btn.textContent = 'Partager'; btn.classList.remove('copied'); }, 2000);
+              setTimeout(() => { btn.textContent = t.shareBtn; btn.classList.remove('copied'); }, 2000);
             });
           }
         });
