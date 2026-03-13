@@ -128,7 +128,7 @@
     }
 
     .rules {
-      margin-top: 3rem;
+      margin-top: 1rem;
       text-align: left;
       font-size: .9rem;
       color: #2a2a2a;
@@ -208,7 +208,7 @@
     .link-item-footer a { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .share-btn {
       margin: 0;
-      padding: .35rem .8rem;
+      padding: .35rem .35rem;
       font-size: .78rem;
       font-weight: 600;
       background: #1a7a5a;
@@ -221,6 +221,41 @@
     }
     .share-btn:hover { opacity: .85; }
     .share-btn.copied { background: #2a2a2a; }
+    .icon-btn {
+      margin: 0;
+      padding: .45rem;
+      background: rgba(26,122,90,.1);
+      color: #1a7a5a;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+    }
+    .icon-btn:hover { background: rgba(26,122,90,.2); }
+    .icon-btn.copied { background: rgba(0,0,0,.08); color: #2a2a2a; }
+    .icon-btn { position: relative; }
+    .icon-btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a;
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .25rem .5rem;
+      border-radius: 5px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s;
+    }
+    .icon-btn.copied::after { opacity: 1; }
 
     #min-warning {
       margin-top: 1rem;
@@ -315,6 +350,34 @@
       }
     }
 
+    .hadith-box {
+      margin-top: 1rem;
+      padding: .7rem 1.1rem;
+      background: #fff;
+      border-radius: 8px;
+      width: 100%;
+      text-align: center;
+    }
+    .hadith-arabic {
+      font-family: 'Noto Naskh Arabic', serif;
+      font-size: 1.2rem;
+      color: #1a7a5a;
+      margin-bottom: .2rem;
+      direction: rtl;
+    }
+    .hadith-text {
+      font-size: .83rem;
+      font-style: italic;
+      color: #333;
+      margin-bottom: .15rem;
+    }
+    .hadith-source {
+      font-size: .68rem;
+      color: rgba(0,0,0,.45);
+      font-weight: 600;
+      letter-spacing: .2px;
+    }
+
     .secret-hint {
       font-size: .78rem;
       color: rgba(0,0,0,.68);
@@ -339,6 +402,11 @@
       <h1><span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span></h1>
       <p class="subtitle" data-i18n="subtitleParticipant"></p>
       <button id="reveal-btn" data-i18n="revealBtn"></button>
+      <div class="hadith-box">
+        <p class="hadith-arabic">تهادوا تحابوا</p>
+        <p class="hadith-text" id="hadith-text" data-i18n="hadithText"></p>
+        <p class="hadith-source" data-i18n="hadithSource"></p>
+      </div>
       <div id="name-box" class="hidden">
         <div class="name-reveal" id="name"></div>
         <p class="secret-hint" id="secret-hint-text"></p>
@@ -382,14 +450,24 @@
       <textarea id="rules-input" rows="4"></textarea>
       <button id="generate-btn" data-i18n="generateBtn"></button>
       <p id="min-warning" class="hidden" data-i18n="minWarning"></p>
-      <div id="rules-output" class="hidden" style="margin-top:1.5rem;background:rgba(26,122,90,.07);border-radius:10px;padding:1rem 1.2rem;text-align:left">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+      <div id="rules-output" class="hidden" style="margin-top:.4rem;background:rgba(26,122,90,.07);border-radius:10px;padding:1rem 1.2rem;text-align:left">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">
           <span style="font-size:.85rem;font-weight:700;color:#1a7a5a" data-i18n="rulesTitle"></span>
           <button id="copy-rules-btn" style="margin:0;padding:.3rem .7rem;font-size:.78rem" data-i18n="copyRules"></button>
         </div>
+        <p id="rules-hint-text" style="font-size:.78rem;color:rgba(0,0,0,.45);line-height:1.5;text-align:left;font-style:italic;margin-bottom:.6rem" data-i18n="rulesHint"></p>
         <pre id="rules-preview" style="font-family:inherit;font-size:.82rem;white-space:pre-wrap;color:#2a2a2a;line-height:1.7;margin:0"></pre>
       </div>
+        <p id="links-intro" class="hidden" style="margin-top:1.5rem;font-size:1rem;font-weight:600;color:#1a1a1a;line-height:1.5" data-i18n="linksIntro"></p>
         <div id="links-output" class="links-list hidden"></div>
+        <div id="organizer-link-output" class="hidden" style="margin-top:1.2rem;background:rgba(26,122,90,.07);border-radius:10px;padding:1rem 1.2rem;text-align:left">
+          <div style="font-size:.85rem;font-weight:700;color:#1a7a5a;margin-bottom:.5rem" data-i18n="organizerLinkTitle"></div>
+          <div style="font-size:.78rem;color:rgba(0,0,0,.55);margin-bottom:.7rem;line-height:1.5" data-i18n="organizerLinkHint"></div>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <input id="organizer-link-input" type="text" readonly style="flex:1;padding:.42rem .7rem;font-size:.75rem;border:1.5px solid rgba(26,122,90,.25);border-radius:7px;font-family:inherit;outline:none;background:#fff;color:#1a1a1a;overflow:hidden;text-overflow:ellipsis">
+            <button id="copy-organizer-link-btn" style="margin:0;padding:.4rem .8rem;font-size:.78rem;white-space:nowrap" data-i18n="copyOrganizerLink"></button>
+          </div>
+        </div>
     </div>
   </div>
 
@@ -429,16 +507,26 @@
         namePlaceholder: 'Prénom',
         labelRules: 'Règles',
         defaultRules: 'Le principe est simple :\nVous tirez un nom, SANS LE COMMUNIQUER À PERSONNE au risque de compromettre l\'effet de surprise.\nVous choisissez un cadeau pour cette personne et le jour J, vous le ramenez bien étiqueté avec le nom de la personne concernée.',
-        generateBtn: 'Tirer au sort',
+        generateBtn: 'C\'est parti ! 🎁',
         minWarning: 'Il faut au moins 3 participants.',
         linkFor: 'Lien pour',
         shareBtn: 'Partager',
+        copyLinkBtn: 'Copier',
         copied: 'Copié !',
         shareText: 'Ton lien, ',
         copyRules: 'Copier les règles',
         copiedRules: 'Copié !',
+        rulesHint: 'Les règles seront visibles par chacun à l\'ouverture de son lien.',
+        linksIntro: 'Bismillah, c\'est parti ! Envoie à chacun son lien secret. 🎁',
+        hadithText: '« Offrez-vous des cadeaux, vous vous aimerez. »',
+        hadithSource: '— Le Prophète ﷺ · Al-Boukhârî',
         secretHint: 'Chut ! Ne révèle ce nom à personne 🤫',
         createMineBtn: 'Créer le mien',
+        restartBtn: 'Créer un nouveau',
+        organizerLinkTitle: '🔗 Ton lien organisateur',
+        organizerLinkHint: 'Sauvegarde ce lien pour retrouver tous les attributions à tout moment.',
+        copyOrganizerLink: 'Copier',
+        copiedOrganizerLink: 'Copié !',
       },
       en: {
         subtitleParticipant: 'Who will receive your gift?',
@@ -457,16 +545,26 @@
         namePlaceholder: 'Name',
         labelRules: 'Rules',
         defaultRules: 'The principle is simple:\nYou draw a name and must NOT TELL ANYONE — it would ruin the surprise.\nChoose a gift for that person and bring it on the day, labeled with their name.',
-        generateBtn: 'Draw',
+        generateBtn: 'Let\'s go! 🎁',
         minWarning: 'At least 3 participants required.',
         linkFor: 'Link for',
         shareBtn: 'Share',
+        copyLinkBtn: 'Copy',
         copied: 'Copied!',
         shareText: 'Your link, ',
         copyRules: 'Copy rules',
         copiedRules: 'Copied!',
+        rulesHint: 'Rules will be visible to each participant when they open their link.',
+        linksIntro: 'Bismillah, let\'s go! Send each participant their secret link. 🎁',
+        hadithText: '"Give gifts to one another; you will love one another."',
+        hadithSource: '— The Prophet ﷺ · Al-Bukhari',
         secretHint: 'Shh! Don\'t reveal this name to anyone 🤫',
         createMineBtn: 'Create mine',
+        restartBtn: 'Create a new one',
+        organizerLinkTitle: '🔗 Your organizer link',
+        organizerLinkHint: 'Save this link to access all assignments at any time.',
+        copyOrganizerLink: 'Copy',
+        copiedOrganizerLink: 'Copied!',
       },
       ar: {
         subtitleParticipant: 'من ستُهدي هذه المرة؟',
@@ -485,16 +583,26 @@
         namePlaceholder: 'الاسم',
         labelRules: 'القواعد',
         defaultRules: 'المبدأ بسيط:\nتسحب اسماً ولا تُخبر أحداً — وإلا ستفسد المفاجأة.\nاختر هدية لهذا الشخص وأحضرها يوم الحفل مع بطاقة باسم صاحبها.',
-        generateBtn: 'أجرِ القرعة',
+        generateBtn: 'يلا نبدأ ! 🎁',
         minWarning: 'يجب أن يكون هناك 3 مشاركين على الأقل.',
         linkFor: 'رابط',
         shareBtn: 'مشاركة',
+        copyLinkBtn: 'نسخ',
         copied: 'تم النسخ!',
         shareText: 'رابطك، ',
         copyRules: 'نسخ القواعد',
         copiedRules: 'تم النسخ!',
+        rulesHint: 'ستظهر القواعد لكل مشارك عند فتح رابطه.',
+        linksIntro: 'بسم الله، انطلق ! أرسل لكل مشارك رابطه السري. 🎁',
+        hadithText: '« تهادوا تحابوا — أهدوا الهدايا تتحابوا. »',
+        hadithSource: '— النبي ﷺ · البخاري',
         secretHint: 'اكتم ! لا تكشف هذا الاسم لأحد 🤫',
         createMineBtn: 'أنشئ تيراجي',
+        restartBtn: 'إنشاء تيراج جديد',
+        organizerLinkTitle: '🔗 رابط المنظِّم',
+        organizerLinkHint: 'احفظ هذا الرابط للعودة إلى جميع الإسنادات في أي وقت.',
+        copyOrganizerLink: 'نسخ',
+        copiedOrganizerLink: 'تم النسخ!',
       }
     };
 
@@ -618,6 +726,25 @@
       return new Uint8Array(await new Response(ds.readable).arrayBuffer());
     }
 
+    // Encode organizer payload (all assignments) into a base64url compressed token
+    async function encodeOrg(names, assignments, rules) {
+      const payload = JSON.stringify({ _org: 1, names, assignments, rules: rules || '' });
+      const bytes = await compress(new TextEncoder().encode(payload));
+      return toB64(bytes);
+    }
+
+    // Try to decode an organizer token; returns {names, assignments, rules} or null
+    async function decodeOrg(code) {
+      try {
+        // Only try current format (single blob, no dot)
+        if (code.includes('.')) return null;
+        const payload = new TextDecoder().decode(await decompress(fromB64(code)));
+        const obj = JSON.parse(payload);
+        if (obj && obj._org === 1) return obj;
+        return null;
+      } catch { return null; }
+    }
+
     // Encode name (+ optional rules separated by \0) into a single base64url compressed token
     async function encode(name, rules) {
       const payload = rules ? name + '\0' + rules : name;
@@ -659,6 +786,107 @@
 
     (async () => {
     if (code) {
+      // Check if organizer token first
+      const orgDecoded = await decodeOrg(code);
+      if (orgDecoded) {
+        const { names, assignments, rules: orgRules } = orgDecoded;
+        document.getElementById('generator').classList.remove('hidden');
+        const t = T[currentLang];
+
+        // Hide form fields, show restart button instead
+        ['names-fields', 'add-name-btn', 'rules-input', 'generate-btn', 'min-warning'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        });
+        document.querySelectorAll('#generator label').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('#generator p[data-i18n="rulesHint"]').forEach(el => el.style.display = 'none');
+
+        const output = document.getElementById('links-output');
+        const baseUrl = window.location.origin + window.location.pathname;
+        output.innerHTML = '';
+
+        if (orgRules) {
+          document.getElementById('rules-preview').textContent = orgRules;
+          const copyBtn = document.getElementById('copy-rules-btn');
+          copyBtn.textContent = t.copyRules;
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(orgRules).then(() => {
+              copyBtn.textContent = t.copiedRules;
+              setTimeout(() => { copyBtn.textContent = t.copyRules; }, 2000);
+            });
+          };
+          document.getElementById('rules-output').classList.remove('hidden');
+        }
+
+        await Promise.all(names.map(async (giver) => {
+          const receiver = assignments[giver];
+          const encoded = await encode(receiver, orgRules);
+          const url = baseUrl + '#' + encoded;
+          const div = document.createElement('div');
+          div.className = 'link-item';
+          const a = document.createElement('a');
+          a.href = url; a.target = '_blank'; a.textContent = url;
+          const cpBtn = document.createElement('button');
+          cpBtn.className = 'icon-btn copy-link-btn';
+          cpBtn.dataset.url = url;
+          cpBtn.title = t.copyLinkBtn;
+          cpBtn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+          const shBtn = document.createElement('button');
+          shBtn.className = 'icon-btn share-link-btn';
+          shBtn.dataset.url = url; shBtn.dataset.name = giver;
+          shBtn.title = t.shareBtn;
+          shBtn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
+          const footer = document.createElement('div');
+          footer.className = 'link-item-footer';
+          footer.appendChild(a); footer.appendChild(cpBtn); footer.appendChild(shBtn);
+          const strong = document.createElement('strong');
+          strong.textContent = t.linkFor + ' ' + giver;
+          div.appendChild(strong); div.appendChild(footer);
+          output.appendChild(div);
+        }));
+
+        document.getElementById('links-intro').classList.remove('hidden');
+        output.classList.remove('hidden');
+
+        const orgInput = document.getElementById('organizer-link-input');
+        orgInput.value = window.location.href;
+        document.getElementById('organizer-link-output').classList.remove('hidden');
+        const copyOrgBtn = document.getElementById('copy-organizer-link-btn');
+        copyOrgBtn.textContent = t.copyOrganizerLink;
+        copyOrgBtn.onclick = () => {
+          navigator.clipboard.writeText(window.location.href).then(() => {
+            copyOrgBtn.textContent = t.copiedOrganizerLink;
+            setTimeout(() => { copyOrgBtn.textContent = t.copyOrganizerLink; }, 2000);
+          });
+        };
+
+        const restartBtn = document.createElement('button');
+        restartBtn.textContent = t.restartBtn;
+        restartBtn.style.cssText = 'background:transparent;color:#1a7a5a;border:1.5px solid rgba(26,122,90,.35);font-size:.9rem;margin-top:1rem';
+        restartBtn.onclick = () => { window.location.href = window.location.origin + window.location.pathname; };
+        document.getElementById('organizer-link-output').insertAdjacentElement('afterend', restartBtn);
+
+        output.addEventListener('click', function(e) {
+          const tt = T[currentLang];
+          const cb = e.target.closest('.copy-link-btn');
+          if (cb) {
+            navigator.clipboard.writeText(cb.dataset.url).then(() => {
+              cb.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+              cb.classList.add('copied');
+              setTimeout(() => {
+                cb.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+                cb.classList.remove('copied');
+              }, 2000);
+            });
+            return;
+          }
+          const sb = e.target.closest('.share-link-btn');
+          if (sb && navigator.share) navigator.share({ title: tt.shareText + sb.dataset.name, url: sb.dataset.url });
+        });
+
+        return;
+      }
+
       const decoded = await decode(code);
       if (decoded) {
         const { name, rules } = decoded;
@@ -710,7 +938,7 @@
       }
 
       // Names fields management
-      function addNameField(value) {
+      function addNameField(value, focus = true) {
         const t = T[currentLang];
         const wrap = document.createElement('div');
         wrap.style.cssText = 'display:flex;gap:.4rem;align-items:center';
@@ -733,11 +961,11 @@
         wrap.appendChild(del);
         const container = document.getElementById('names-fields');
         container.appendChild(wrap);
-        input.focus();
+        if (focus) input.focus();
       }
 
       // Init with 3 empty fields (minimum required)
-      for (let i = 0; i < 3; i++) addNameField();
+      for (let i = 0; i < 3; i++) addNameField('', i === 0);
 
       document.getElementById('add-name-btn').addEventListener('click', () => addNameField());
 
@@ -779,14 +1007,22 @@
           a.href = url;
           a.target = '_blank';
           a.textContent = url;
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'icon-btn copy-link-btn';
+          copyBtn.dataset.url = url;
+          copyBtn.title = t.copyLinkBtn;
+          copyBtn.dataset.tooltip = t.copied;
+          copyBtn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
           const shareBtn = document.createElement('button');
-          shareBtn.className = 'share-btn';
+          shareBtn.className = 'icon-btn share-link-btn';
           shareBtn.dataset.url = url;
           shareBtn.dataset.name = giver;
-          shareBtn.textContent = t.shareBtn;
+          shareBtn.title = t.shareBtn;
+          shareBtn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
           const footer = document.createElement('div');
           footer.className = 'link-item-footer';
           footer.appendChild(a);
+          footer.appendChild(copyBtn);
           footer.appendChild(shareBtn);
           const strong = document.createElement('strong');
           strong.textContent = t.linkFor + ' ' + giver;
@@ -794,22 +1030,47 @@
           div.appendChild(footer);
           output.appendChild(div);
         }));
+        document.getElementById('links-intro').classList.remove('hidden');
         output.classList.remove('hidden');
+
+        // Generate and show organizer link
+        const orgToken = await encodeOrg(names, assignments, customRules);
+        const orgUrl = baseUrl + '#' + orgToken;
+        const orgInput = document.getElementById('organizer-link-input');
+        orgInput.value = orgUrl;
+        const orgBox = document.getElementById('organizer-link-output');
+        orgBox.classList.remove('hidden');
+        const copyOrgBtn = document.getElementById('copy-organizer-link-btn');
+        copyOrgBtn.textContent = T[currentLang].copyOrganizerLink;
+        copyOrgBtn.onclick = () => {
+          navigator.clipboard.writeText(orgUrl).then(() => {
+            copyOrgBtn.textContent = T[currentLang].copiedOrganizerLink;
+            setTimeout(() => { copyOrgBtn.textContent = T[currentLang].copyOrganizerLink; }, 2000);
+          });
+        };
+
         output.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         output.addEventListener('click', function(e) {
-          const btn = e.target.closest('.share-btn');
+          const t = T[currentLang];
+          const copyBtn = e.target.closest('.copy-link-btn');
+          if (copyBtn) {
+            navigator.clipboard.writeText(copyBtn.dataset.url).then(() => {
+              copyBtn.classList.add('copied');
+              setTimeout(() => { copyBtn.classList.remove('copied'); }, 2000);
+            });
+            return;
+          }
+          const btn = e.target.closest('.share-link-btn');
           if (!btn) return;
           const url = btn.dataset.url;
           const name = btn.dataset.name;
-          const t = T[currentLang];
           if (navigator.share) {
             navigator.share({ title: 'El Aid El Secret', text: t.shareText + name + ' !', url });
           } else {
             navigator.clipboard.writeText(url).then(() => {
-              btn.textContent = t.copied;
               btn.classList.add('copied');
-              setTimeout(() => { btn.textContent = t.shareBtn; btn.classList.remove('copied'); }, 2000);
+              setTimeout(() => { btn.classList.remove('copied'); }, 2000);
             });
           }
         });
