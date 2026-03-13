@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secret Santa</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, serif;
+      background: #1a472a;
+      color: #fff;
+    }
+    .card {
+      background: #c41e3a;
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      max-width: 520px;
+      width: 90vw;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,.3);
+    }
+    h1 { font-size: 1.6rem; margin-bottom: 1.5rem; }
+    .name {
+      font-size: 2.4rem;
+      font-weight: bold;
+      background: #fff;
+      color: #c41e3a;
+      border-radius: 8px;
+      padding: .6rem 1.2rem;
+      display: inline-block;
+    }
+    .hidden { display: none; }
+    button {
+      margin-top: 1rem;
+      padding: .7rem 1.8rem;
+      font-size: 1.1rem;
+      border: 2px solid #fff;
+      background: transparent;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    button:hover { background: rgba(255,255,255,.15); }
+    .error { font-size: 1.2rem; }
+    textarea {
+      width: 100%;
+      padding: .6rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      resize: vertical;
+    }
+    .links-list {
+      margin-top: 1rem;
+      text-align: left;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .link-item {
+      background: rgba(0,0,0,.2);
+      border-radius: 6px;
+      padding: .5rem .7rem;
+      margin-bottom: .5rem;
+      font-size: .85rem;
+      word-break: break-all;
+    }
+    .link-item strong { font-size: .95rem; }
+    .link-item a { color: #ffd; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- Mode participant -->
+    <div id="participant" class="hidden">
+      <h1>Tu offres un cadeau a :</h1>
+      <button id="reveal-btn">Cliquer pour decouvrir</button>
+      <div id="name-box" class="hidden">
+        <span class="name" id="name"></span>
+      </div>
+    </div>
+
+    <!-- Mode erreur -->
+    <div id="error" class="hidden">
+      <p class="error">Lien invalide. Demande ton lien personnel a l'organisateur.</p>
+    </div>
+
+    <!-- Mode generateur -->
+    <div id="generator" class="hidden">
+      <h1>Secret Santa</h1>
+      <p>Entre les prenoms (un par ligne) :</p>
+      <textarea id="names-input" rows="6" placeholder="Alice&#10;Bob&#10;Charlie&#10;..."></textarea>
+      <button id="generate-btn">Tirer au sort et generer les liens</button>
+      <p id="min-warning" class="hidden" style="margin-top:.8rem;font-size:.9rem;">Il faut au moins 3 participants.</p>
+      <div id="links-output" class="links-list hidden"></div>
+    </div>
+  </div>
+
+  <script>
+    // XOR chaque octet du nom avec une cle aleatoire, puis encode le tout en hex
+    function encode(name) {
+      const bytes = new TextEncoder().encode(name);
+      const key = crypto.getRandomValues(new Uint8Array(bytes.length));
+      const encrypted = new Uint8Array(bytes.length);
+      for (let i = 0; i < bytes.length; i++) {
+        encrypted[i] = bytes[i] ^ key[i];
+      }
+      // Format: key_hex + "." + encrypted_hex
+      const toHex = (arr) => Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+      return toHex(key) + '.' + toHex(encrypted);
+    }
+
+    function decode(code) {
+      try {
+        const [keyHex, dataHex] = code.split('.');
+        const fromHex = (h) => new Uint8Array(h.match(/.{2}/g).map(b => parseInt(b, 16)));
+        const key = fromHex(keyHex);
+        const data = fromHex(dataHex);
+        const decrypted = new Uint8Array(data.length);
+        for (let i = 0; i < data.length; i++) {
+          decrypted[i] = data[i] ^ key[i];
+        }
+        return new TextDecoder().decode(decrypted);
+      } catch {
+        return null;
+      }
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("p");
+
+    if (code) {
+      const name = decode(code);
+      if (name) {
+        document.getElementById("participant").classList.remove("hidden");
+        document.getElementById("reveal-btn").addEventListener("click", function () {
+          this.classList.add("hidden");
+          document.getElementById("name").textContent = name;
+          document.getElementById("name-box").classList.remove("hidden");
+        });
+      } else {
+        document.getElementById("error").classList.remove("hidden");
+      }
+    } else {
+      document.getElementById("generator").classList.remove("hidden");
+
+      // Melange Fisher-Yates
+      function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
+
+      // Tirage en boucle : chaque personne offre a la suivante dans la boucle
+      // Garantit que personne ne tombe sur soi-meme
+      function drawCircle(names) {
+        const shuffled = shuffle(names);
+        // shuffled[0] -> shuffled[1], shuffled[1] -> shuffled[2], ... last -> shuffled[0]
+        const assignments = {};
+        for (let i = 0; i < shuffled.length; i++) {
+          assignments[shuffled[i]] = shuffled[(i + 1) % shuffled.length];
+        }
+        return assignments;
+      }
+
+      document.getElementById("generate-btn").addEventListener("click", function () {
+        const raw = document.getElementById("names-input").value.trim();
+        if (!raw) return;
+        const names = raw.split('\n').map(n => n.trim()).filter(Boolean);
+        const warning = document.getElementById("min-warning");
+        if (names.length < 3) {
+          warning.classList.remove("hidden");
+          return;
+        }
+        warning.classList.add("hidden");
+
+        const assignments = drawCircle(names);
+        const output = document.getElementById("links-output");
+        const baseUrl = window.location.origin + window.location.pathname;
+        output.innerHTML = '';
+
+        // Affiche le lien pour chaque personne, mais PAS le nom du destinataire
+        names.forEach(giver => {
+          const receiver = assignments[giver];
+          const encoded = encode(receiver);
+          const url = baseUrl + '?p=' + encoded;
+          const div = document.createElement('div');
+          div.className = 'link-item';
+          div.innerHTML = '<strong>Lien pour ' + giver + ' :</strong><br><a href="' + url + '">' + url + '</a>';
+          output.appendChild(div);
+        });
+        output.classList.remove("hidden");
+      });
+    }
+  </script>
+</body>
+</html>
