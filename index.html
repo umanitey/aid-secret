@@ -543,36 +543,66 @@
       });
     }
 
-    // Encode name (+ optional rules separated by \0) into a hex XOR token
-    function encode(name, rules) {
-      const payload = rules ? name + '\0' + rules : name;
-      const bytes = new TextEncoder().encode(payload);
-      const key = crypto.getRandomValues(new Uint8Array(bytes.length));
-      const encrypted = new Uint8Array(bytes.length);
-      for (let i = 0; i < bytes.length; i++) encrypted[i] = bytes[i] ^ key[i];
-      const toHex = (arr) => Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
-      return toHex(key) + '.' + toHex(encrypted);
+    // helpers: base64url (no padding)
+    const toB64 = (arr) => btoa(String.fromCharCode(...arr)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    const fromB64 = (s) => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+
+    // compress bytes with DeflateRaw
+    async function compress(bytes) {
+      const ds = new CompressionStream('deflate-raw');
+      const writer = ds.writable.getWriter();
+      writer.write(bytes); writer.close();
+      return new Uint8Array(await new Response(ds.readable).arrayBuffer());
+    }
+    async function decompress(bytes) {
+      const ds = new DecompressionStream('deflate-raw');
+      const writer = ds.writable.getWriter();
+      writer.write(bytes); writer.close();
+      return new Uint8Array(await new Response(ds.readable).arrayBuffer());
     }
 
-    function decode(code) {
+    // Encode name (+ optional rules separated by \0) into a single base64url compressed token
+    async function encode(name, rules) {
+      const payload = rules ? name + '\0' + rules : name;
+      const bytes = await compress(new TextEncoder().encode(payload));
+      return toB64(bytes);
+    }
+
+    async function decode(code) {
       try {
-        const [keyHex, dataHex] = code.split('.');
-        const fromHex = (h) => new Uint8Array(h.match(/.{2}/g).map(b => parseInt(b, 16)));
-        const key = fromHex(keyHex);
-        const data = fromHex(dataHex);
-        const decrypted = new Uint8Array(data.length);
-        for (let i = 0; i < data.length; i++) decrypted[i] = data[i] ^ key[i];
-        const payload = new TextDecoder().decode(decrypted);
+        // legacy hex XOR support (two hex segments separated by a dot)
+        if (/^[0-9a-f]+\.[0-9a-f]+$/.test(code)) {
+          const fromHex = (h) => new Uint8Array(h.match(/.{2}/g).map(b => parseInt(b, 16)));
+          const [kh, dh] = code.split('.');
+          const key = fromHex(kh), data = fromHex(dh);
+          const decrypted = new Uint8Array(data.length);
+          for (let i = 0; i < data.length; i++) decrypted[i] = data[i] ^ key[i];
+          const payload = new TextDecoder().decode(decrypted);
+          const sep = payload.indexOf('\0');
+          return sep === -1 ? { name: payload, rules: null } : { name: payload.slice(0, sep), rules: payload.slice(sep + 1) };
+        }
+        // legacy base64url XOR support (two base64url segments separated by a dot)
+        if (/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(code)) {
+          const [kb, db] = code.split('.');
+          const key = fromB64(kb), data = fromB64(db);
+          const encrypted = new Uint8Array(data.length);
+          for (let i = 0; i < data.length; i++) encrypted[i] = data[i] ^ key[i];
+          const payload = new TextDecoder().decode(await decompress(encrypted));
+          const sep = payload.indexOf('\0');
+          return sep === -1 ? { name: payload, rules: null } : { name: payload.slice(0, sep), rules: payload.slice(sep + 1) };
+        }
+        // current format: single base64url compressed blob
+        const payload = new TextDecoder().decode(await decompress(fromB64(code)));
         const sep = payload.indexOf('\0');
-        if (sep === -1) return { name: payload, rules: null };
-        return { name: payload.slice(0, sep), rules: payload.slice(sep + 1) };
+        return sep === -1 ? { name: payload, rules: null } : { name: payload.slice(0, sep), rules: payload.slice(sep + 1) };
       } catch { return null; }
     }
 
-    const code = params.get('p');
+    const code = window.location.hash ? window.location.hash.substring(1) : params.get('p');
 
+    (async () => {
     if (code) {
-      const decoded = decode(code);
+      const decoded = await decode(code);
       if (decoded) {
         const { name, rules } = decoded;
         document.getElementById('participant').classList.remove('hidden');
@@ -620,7 +650,7 @@
         return assignments;
       }
 
-      document.getElementById('generate-btn').addEventListener('click', function () {
+      document.getElementById('generate-btn').addEventListener('click', async function () {
         const raw = document.getElementById('names-input').value.trim();
         if (!raw) return;
         const names = raw.split('\n').map(n => n.trim()).filter(Boolean);
@@ -650,10 +680,10 @@
 
         output.innerHTML = '';
 
-        names.forEach(giver => {
+        await Promise.all(names.map(async (giver) => {
           const receiver = assignments[giver];
-          const encoded = encode(receiver, customRules);
-          const url = baseUrl + '?p=' + encoded;
+          const encoded = await encode(receiver, customRules);
+          const url = baseUrl + '#' + encoded;
           const div = document.createElement('div');
           div.className = 'link-item';
           const a = document.createElement('a');
@@ -674,7 +704,7 @@
           div.appendChild(strong);
           div.appendChild(footer);
           output.appendChild(div);
-        });
+        }));
         output.classList.remove('hidden');
         output.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -696,6 +726,7 @@
         });
       });
     }
+    })();
   </script>
 </body>
 </html>
