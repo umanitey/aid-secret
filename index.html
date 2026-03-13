@@ -59,6 +59,8 @@
     .lang-btn.active { background: #1a7a5a; color: #fff; border-color: #1a7a5a; }
     .create-mine-btn { margin-left: .4rem; border-left: 1.5px solid rgba(0,0,0,.1); padding-left: .9rem; color: #1a7a5a; border-color: rgba(26,122,90,.3); }
     .create-mine-btn:hover { background: rgba(26,122,90,.08); }
+    #add-name-btn { width: 100%; border-radius: 10px; }
+    #add-name-btn:hover { background: rgba(26,122,90,.06); opacity: 1; }
 
     .logo {
       font-size: 4rem;
@@ -373,8 +375,9 @@
       <div class="logo"><img src="mouton.png" height="200" alt="logo mouton"></div>
       <h1><span style="white-space:nowrap">El Aid</span> <span style="white-space:nowrap">El Secret</span></h1>
       <p class="subtitle" data-i18n="subtitleGenerator"></p>
-      <label for="names-input" style="margin-bottom:.4rem" data-i18n="labelNames"></label>
-      <textarea id="names-input" rows="6" data-i18n-placeholder="namesPlaceholder"></textarea>
+      <label style="margin-bottom:.6rem" data-i18n="labelNames"></label>
+      <div id="names-fields" style="display:flex;flex-direction:column;gap:.5rem;width:100%"></div>
+      <button id="add-name-btn" type="button" style="margin-top:.6rem;background:transparent;color:#1a7a5a;border:1.5px dashed rgba(26,122,90,.35);font-size:.9rem;font-weight:600;padding:.6rem 1rem" data-i18n="addNameBtn"></button>
       <label for="rules-input" style="margin-top:1rem;margin-bottom:.4rem" data-i18n="labelRules"></label>
       <textarea id="rules-input" rows="4"></textarea>
       <button id="generate-btn" data-i18n="generateBtn"></button>
@@ -421,8 +424,9 @@
         rulesTitle: 'Les règles',
         errorText: 'Lien invalide.<br>Demande ton lien à l\'organisateur.',
         subtitleGenerator: 'Le tirage au sort des cadeaux',
-        labelNames: 'Participants — un prénom par ligne',
-        namesPlaceholder: 'Fatima\nMaryam\nYoussef\nIbrahim',
+        labelNames: 'Participants',
+        addNameBtn: '+ Ajouter un participant',
+        namePlaceholder: 'Prénom',
         labelRules: 'Règles',
         defaultRules: 'Le principe est simple :\nVous tirez un nom, SANS LE COMMUNIQUER À PERSONNE au risque de compromettre l\'effet de surprise.\nVous choisissez un cadeau pour cette personne et le jour J, vous le ramenez bien étiqueté avec le nom de la personne concernée.',
         generateBtn: 'Tirer au sort',
@@ -448,8 +452,9 @@
         rulesTitle: 'Rules',
         errorText: 'Invalid link.<br>Ask the organizer for your link.',
         subtitleGenerator: 'Secret gift draw',
-        labelNames: 'Participants — one name per line',
-        namesPlaceholder: 'Fatima\nMaryam\nYoussef\nIbrahim',
+        labelNames: 'Participants',
+        addNameBtn: '+ Add a participant',
+        namePlaceholder: 'Name',
         labelRules: 'Rules',
         defaultRules: 'The principle is simple:\nYou draw a name and must NOT TELL ANYONE — it would ruin the surprise.\nChoose a gift for that person and bring it on the day, labeled with their name.',
         generateBtn: 'Draw',
@@ -475,8 +480,9 @@
         rulesTitle: 'القواعد',
         errorText: 'رابط غير صالح.<br>اطلب رابطك من المنظِّم.',
         subtitleGenerator: 'قرعة الهدايا السرية',
-        labelNames: 'المشاركون — اسم في كل سطر',
-        namesPlaceholder: 'فاطمة\nمريم\nيوسف\nإبراهيم',
+        labelNames: 'المشاركون',
+        addNameBtn: '+ إضافة مشارك',
+        namePlaceholder: 'الاسم',
         labelRules: 'القواعد',
         defaultRules: 'المبدأ بسيط:\nتسحب اسماً ولا تُخبر أحداً — وإلا ستفسد المفاجأة.\nاختر هدية لهذا الشخص وأحضرها يوم الحفل مع بطاقة باسم صاحبها.',
         generateBtn: 'أجرِ القرعة',
@@ -516,9 +522,8 @@
         if (t[key] !== undefined) el.placeholder = t[key];
       });
 
-      // Update names placeholder (multiline)
-      const namesInput = document.getElementById('names-input');
-      if (namesInput) namesInput.placeholder = t.namesPlaceholder;
+      // Update name fields placeholders
+      document.querySelectorAll('.name-field-input').forEach(el => { el.placeholder = t.namePlaceholder; });
 
       // Update rules textarea only if it still contains a default value
       const rulesInput = document.getElementById('rules-input');
@@ -704,10 +709,40 @@
         return assignments;
       }
 
+      // Names fields management
+      function addNameField(value) {
+        const t = T[currentLang];
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'display:flex;gap:.4rem;align-items:center';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'name-field-input';
+        input.placeholder = t.namePlaceholder;
+        input.value = value || '';
+        input.style.cssText = 'flex:1;padding:.65rem .85rem;font-size:1rem;border:none;border-radius:10px;font-family:inherit;background:rgba(0,0,0,.04);color:#1a1a1a;outline:none';
+        input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addNameField(); } });
+        const del = document.createElement('button');
+        del.type = 'button';
+        del.textContent = '×';
+        del.style.cssText = 'margin:0;padding:0;width:34px;height:34px;background:rgba(0,0,0,.06);color:rgba(0,0,0,.4);border:none;border-radius:8px;font-size:1.2rem;line-height:1;cursor:pointer;flex-shrink:0';
+        del.addEventListener('click', () => {
+          const fields = document.getElementById('names-fields');
+          if (fields.children.length > 1) wrap.remove();
+        });
+        wrap.appendChild(input);
+        wrap.appendChild(del);
+        const container = document.getElementById('names-fields');
+        container.appendChild(wrap);
+        input.focus();
+      }
+
+      // Init with 3 empty fields (minimum required)
+      for (let i = 0; i < 3; i++) addNameField();
+
+      document.getElementById('add-name-btn').addEventListener('click', () => addNameField());
+
       document.getElementById('generate-btn').addEventListener('click', async function () {
-        const raw = document.getElementById('names-input').value.trim();
-        if (!raw) return;
-        const names = raw.split('\n').map(n => n.trim()).filter(Boolean);
+        const names = Array.from(document.querySelectorAll('.name-field-input')).map(i => i.value.trim()).filter(Boolean);
         const warning = document.getElementById('min-warning');
         if (names.length < 3) { warning.classList.remove('hidden'); return; }
         warning.classList.add('hidden');
